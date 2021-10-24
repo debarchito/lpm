@@ -5,7 +5,7 @@ pub enum Command {
   /// Handle Lite-XL plugins
   Plugin {
     #[structopt(long, short, takes_value = true, multiple = true)]
-    /// Install colors in store
+    /// Install plugins in store
     install: Vec<String>,
     #[structopt(long, short, takes_value = true, multiple = true)]
     /// Install plugins in store and link them with Lite-XL's plugins directory
@@ -29,7 +29,7 @@ pub enum Command {
   /// Handle Lite-XL colors
   Color {
     #[structopt(long, short, takes_value = true, multiple = true)]
-    /// Install colors in store
+    /// Install plugins in store
     install: Vec<String>,
     #[structopt(long, short, takes_value = true, multiple = true)]
     /// Install colors in store and link them with Lite-XL's colors directory

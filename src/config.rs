@@ -18,7 +18,7 @@ pub fn init() -> Result<structs::LpmTOML> {
 fn create_lpm_store() -> Result<structs::LpmTOML> {
   let home_dir = dirs::home_dir().context("Failed to locate the home directory")?;
   let lpm_toml = structs::LpmTOML {
-    store: Path::new(&home_dir).join(".lpm-store"),
+    store: home_dir.join(".lpm-store"),
     target: home_dir.join(".config").join("lite-xl"),
     config: structs::LpmTOMLConfig {
       git: true,
