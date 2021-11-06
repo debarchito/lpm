@@ -11,3 +11,6 @@ target/
 # Test Folders and files
 **/*.test.rs
 **/*.test.toml
+
+# Plans
+plans/

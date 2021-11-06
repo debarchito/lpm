@@ -10,14 +10,12 @@ readme = "README.md"
 license = "MIT"
 keywords = ["lite-xl", "lpm"]
 categories = ["package-manager"]
-resolver = "2"
 edition = "2021"
 
 [dependencies]
 anyhow = "1.0.44"
 dirs = "4.0.0"
-futures = "0.3.17"
-reqwest = "0.11.5"
+reqwest = { version = "0.11.5", features = ["blocking"] }
 serde = { version = "1.0.130", features = ["derive"] }
 structopt = "0.3.23"
 termcolor = "1.1.2"
@@ -26,6 +24,10 @@ toml = "0.5.8"
 
 [target.'cfg(windows)'.dependencies]
 junction = "0.2.0"
+
+[target.'cfg(unix)'.dependencies]
+openssl = { version = "0.10.37", features = ["vendored"] }
+# This requires a C compiler, perl and make
 
 [profile.release]
 strip = true

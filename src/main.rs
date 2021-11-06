@@ -1,3 +1,6 @@
+#![allow(stable_features)]
+#![feature(is_symlink)]
+
 use anyhow::Result;
 mod cli;
 mod config;
