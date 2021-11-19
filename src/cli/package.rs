@@ -1,13 +1,13 @@
-use std::path::PathBuf;
-use std::process;
 use std::fs::remove_dir_all;
+use std::path::{Path, PathBuf};
+use std::process;
 
-use anyhow::{Result, Context};
-use crate::config::structs;
 use crate::cli::colorize;
+use crate::config::structs;
+use anyhow::{Context, Result};
 use termcolor::{ColorChoice, StandardStream};
-mod utils;
 mod registry;
+mod utils;
 
 #[cfg(target_os = "windows")]
 fn link_from_store(src: PathBuf, dest: PathBuf) -> Result<()> {
@@ -29,7 +29,7 @@ fn link_exists(link: &PathBuf) -> Result<bool> {
   }
 }
 #[cfg(not(target_os = "windows"))]
-fn link_exists(link: &PathBuf) -> Result<bool> {
+fn link_exists(link: &Path) -> Result<bool> {
   if std::fs::symlink_metadata(link)?.is_symlink() {
     Ok(true)
   } else {
@@ -44,8 +44,8 @@ pub fn list(r#type: &str, lpm_toml: structs::LpmTOML, global: bool) -> Result<()
   stdout.success()?;
   println!("\n[?] List of {}: \n", r#type);
   stdout.reset()?;
-  let point_to = if global { 
-    lpm_toml.store.join(r#type) 
+  let point_to = if global {
+    lpm_toml.store.join(r#type)
   } else {
     lpm_toml.target.join(r#type)
   };
@@ -59,7 +59,10 @@ pub fn list(r#type: &str, lpm_toml: structs::LpmTOML, global: bool) -> Result<()
           .file_name()
           .with_context(|| format!("Failed to extract the filename for path: {:?}", path))?
           .to_str()
-          .with_context(|| format!("Failed to convert filename (osstr) to str for path: {:?}", path))?
+          .with_context(|| format!(
+            "Failed to convert filename (osstr) to str for path: {:?}",
+            path
+          ))?
       );
       index += 1;
     }
@@ -71,7 +74,8 @@ pub fn list(r#type: &str, lpm_toml: structs::LpmTOML, global: bool) -> Result<()
 }
 
 pub fn link(r#type: &str, packages: Vec<String>, lpm_toml: structs::LpmTOML) -> Result<()> {
-  println!("");
+  // Subject to Change
+  println!();
   let mut stdout = colorize::Colorize {
     stream: StandardStream::stdout(ColorChoice::Always),
   };
@@ -98,7 +102,8 @@ pub fn link(r#type: &str, packages: Vec<String>, lpm_toml: structs::LpmTOML) -> 
 }
 
 pub fn unlink(r#type: &str, packages: Vec<String>, lpm_toml: structs::LpmTOML) -> Result<()> {
-  println!("");
+  //Subject to change
+  println!();
   let mut stdout = colorize::Colorize {
     stream: StandardStream::stdout(ColorChoice::Always),
   };

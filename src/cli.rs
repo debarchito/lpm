@@ -1,25 +1,25 @@
 #![allow(unused_variables)]
 
-use structopt::StructOpt;
 use anyhow::Result;
+use structopt::StructOpt;
 
 use crate::config::structs;
+pub mod colorize;
 mod enums;
 mod package;
-pub mod colorize;
 
 #[derive(Debug, StructOpt)]
 #[structopt(
   name = "Lite-XL Package Manager (lpm)",
   about = "A package manager for the Lite-XL code editor"
 )]
-struct LPM {
+struct Lpm {
   #[structopt(subcommand)]
   cmd: enums::Command,
 }
 
 pub fn init(lpm_toml: structs::LpmTOML) -> Result<()> {
-  let lpm = LPM::from_args();
+  let lpm = Lpm::from_args();
   match lpm.cmd {
     enums::Command::Plugin {
       install,
