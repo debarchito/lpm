@@ -1,5 +1,5 @@
-use anyhow::{Result, Context};
-use termcolor::{StandardStream, ColorSpec, Color, WriteColor};
+use anyhow::{Context, Result};
+use termcolor::{Color, ColorSpec, StandardStream, WriteColor};
 
 const CONTEXT: &str = "Caused at \"$PROJECTDIR/src/cli/colorize.rs\" by the \"termcolor\" crate";
 

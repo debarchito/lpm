@@ -1,6 +1,6 @@
 use anyhow::{Context, Result};
 use std::fs::{create_dir_all, read_to_string, write};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 pub mod structs;
 
@@ -18,7 +18,7 @@ pub fn init() -> Result<structs::LpmTOML> {
   }
 }
 
-fn create_lpm_store(home_dir: &PathBuf) -> Result<()> {
+fn create_lpm_store(home_dir: &Path) -> Result<()> {
   create_dir_all(home_dir.join("plugins"))
     .context("Failed to create \"plugins\" directory in store")?;
   create_dir_all(home_dir.join("colors"))
@@ -42,7 +42,7 @@ fn init_lpm_store(home_dir: PathBuf, lpm_toml_path: PathBuf) -> Result<structs::
   Ok(lpm_toml)
 }
 
-fn create_lpm_toml(lpm_toml_path: &PathBuf, lpm_toml: &structs::LpmTOML) -> Result<()> {
+fn create_lpm_toml(lpm_toml_path: &Path, lpm_toml: &structs::LpmTOML) -> Result<()> {
   write(
     lpm_toml_path,
     format!(
