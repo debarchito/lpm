@@ -9,7 +9,6 @@ pub fn init() -> Result<structs::LpmTOML> {
   //Adds, plugins, color and font to .lpm_store rather than home directory
 
   let lpm_store_path = home_dir.join(".lpm-store");
-
   let lpm_toml_path = lpm_store_path.join("lpm.toml");
   if !lpm_toml_path.exists() {
     create_lpm_store(&lpm_store_path)?;
