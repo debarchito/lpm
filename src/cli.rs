@@ -21,66 +21,22 @@ struct Lpm {
 pub fn init(lpm_toml: structs::LpmTOML) -> Result<()> {
   let lpm = Lpm::from_args();
   match lpm.cmd {
-    enums::Command::Plugin {
-      install,
-      add,
-      link,
-      force,
-      remove,
-      unlink,
-      list,
-      global,
-    } => {
-      if !install.is_empty() {
-        package::install("plugins", install)?;
-      } else if !link.is_empty() {
-        package::link("plugins", link, lpm_toml)?;
-      } else if !unlink.is_empty() {
-        package::unlink("plugins", unlink, lpm_toml)?;
-      } else if list {
-        package::list("plugins", lpm_toml, global)?;
-      }
-    }
-    enums::Command::Color {
-      install,
-      add,
-      link,
-      force,
-      remove,
-      unlink,
-      list,
-      global,
-    } => {
-      if !install.is_empty() {
-        package::install("colors", install)?;
-      } else if !link.is_empty() {
-        package::link("colors", link, lpm_toml)?;
-      } else if !unlink.is_empty() {
-        package::unlink("colors", unlink, lpm_toml)?;
-      } else if list {
-        package::list("colors", lpm_toml, global)?;
-      }
-    }
-    enums::Command::Font {
-      install,
-      add,
-      link,
-      force,
-      remove,
-      unlink,
-      list,
-      global,
-    } => {
-      if !install.is_empty() {
-        package::install("fonts", install)?;
-      } else if !link.is_empty() {
-        package::link("fonts", link, lpm_toml)?;
-      } else if !unlink.is_empty() {
-        package::unlink("fonts", unlink, lpm_toml)?;
-      } else if list {
-        package::list("fonts", lpm_toml, global)?;
-      }
-    }
+    enums::Command::Plugin(options) => exec(options, lpm_toml)?,
+    enums::Command::Color(options) => exec(options, lpm_toml)?,
+    enums::Command::Font(options) => exec(options, lpm_toml)?,
+  }
+  Ok(())
+}
+
+fn exec(option: enums::Options, lpm_toml: structs::LpmTOML) -> Result<()> {
+  if !option.install.is_empty() {
+    package::install("fonts", option.install)?;
+  } else if !option.link.is_empty() {
+    package::link("fonts", option.link, lpm_toml)?;
+  } else if !option.unlink.is_empty() {
+    package::unlink("fonts", option.unlink, lpm_toml)?;
+  } else if option.list {
+    package::list("fonts", lpm_toml, option.global)?;
   }
   Ok(())
 }
