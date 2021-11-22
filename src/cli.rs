@@ -23,13 +23,11 @@ pub fn init(lpm_toml: structs::LpmTOML) -> Result<()> {
   match lpm.cmd {
     enums::Command::Plugin {
       install,
-      add,
       link,
-      force,
-      remove,
       unlink,
       list,
       global,
+      ..
     } => {
       if !install.is_empty() {
         package::install("plugins", install)?;
@@ -43,13 +41,11 @@ pub fn init(lpm_toml: structs::LpmTOML) -> Result<()> {
     }
     enums::Command::Color {
       install,
-      add,
       link,
-      force,
-      remove,
       unlink,
       list,
       global,
+      ..
     } => {
       if !install.is_empty() {
         package::install("colors", install)?;
@@ -63,13 +59,11 @@ pub fn init(lpm_toml: structs::LpmTOML) -> Result<()> {
     }
     enums::Command::Font {
       install,
-      add,
       link,
-      force,
-      remove,
       unlink,
       list,
       global,
+      ..
     } => {
       if !install.is_empty() {
         package::install("fonts", install)?;

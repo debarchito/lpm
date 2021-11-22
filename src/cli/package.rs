@@ -10,24 +10,24 @@ mod registry;
 mod utils;
 
 #[cfg(target_os = "windows")]
-pub fn link_from_store(src: PathBuf, dest: PathBuf) -> Result<()> {
+fn link_from_store(src: PathBuf, dest: PathBuf) -> Result<()> {
   junction::create(src, dest)?;
   Ok(())
 }
 #[cfg(target_os = "windows")]
-pub fn link_exists(link: &PathBuf) -> Result<bool> {
-  let exists:bool =  junction::exists(link)?;
+fn link_exists(link: &PathBuf) -> Result<bool> {
+  let exists: bool = junction::exists(link)?;
   Ok(exists);
 }
 
 #[cfg(not(target_os = "windows"))]
-pub fn link_from_store(src: PathBuf, dest: PathBuf) -> Result<()> {
+fn link_from_store(src: PathBuf, dest: PathBuf) -> Result<()> {
   std::os::unix::fs::symlink(src, dest)?;
   Ok(())
 }
 #[cfg(not(target_os = "windows"))]
-pub fn link_exists(link: &Path) -> Result<bool> {
-  let exists:bool = std::fs::symlink_metadata(link)?.is_symlink();
+fn link_exists(link: &Path) -> Result<bool> {
+  let exists: bool = std::fs::symlink_metadata(link)?.is_symlink();
   Ok(exists)
 }
 
