@@ -14,27 +14,21 @@ fn link_from_store(src: PathBuf, dest: PathBuf) -> Result<()> {
   junction::create(src, dest)?;
   Ok(())
 }
+#[cfg(target_os = "windows")]
+fn link_exists(link: &PathBuf) -> Result<bool> {
+  let exists: bool = junction::exists(link)?;
+  Ok(exists);
+}
+
 #[cfg(not(target_os = "windows"))]
 fn link_from_store(src: PathBuf, dest: PathBuf) -> Result<()> {
   std::os::unix::fs::symlink(src, dest)?;
   Ok(())
 }
-
-#[cfg(target_os = "windows")]
-fn link_exists(link: &PathBuf) -> Result<bool> {
-  if junction::exists(link)? {
-    Ok(true)
-  } else {
-    Ok(false)
-  }
-}
 #[cfg(not(target_os = "windows"))]
 fn link_exists(link: &Path) -> Result<bool> {
-  if std::fs::symlink_metadata(link)?.is_symlink() {
-    Ok(true)
-  } else {
-    Ok(false)
-  }
+  let exists: bool = std::fs::symlink_metadata(link)?.is_symlink();
+  Ok(exists)
 }
 
 pub fn list(r#type: &str, lpm_toml: structs::LpmTOML, global: bool) -> Result<()> {
@@ -126,7 +120,6 @@ pub fn unlink(r#type: &str, packages: Vec<String>, lpm_toml: structs::LpmTOML) -
 pub fn install(r#type: &str, packages: Vec<String>) -> Result<()> {
   let _packages = utils::verify(r#type, packages)?;
   /*for (package_name, registry_info) in packages.iter() {
-
   }*/
   Ok(())
 }
