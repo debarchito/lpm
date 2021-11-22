@@ -1,18 +1,15 @@
 use anyhow::{Context, Result};
 use std::fs::{create_dir_all, read_to_string, write};
-use std::path::{Path, PathBuf};
-
+use std::path::PathBuf;
 pub mod structs;
 
 pub fn init() -> Result<structs::LpmTOML> {
   let home_dir = dirs::home_dir().context("Failed to locate the home directory")?;
-  //Adds, plugins, color and font to .lpm_store rather than home directory
-
   let lpm_store_path = home_dir.join(".lpm-store");
   let lpm_toml_path = lpm_store_path.join("lpm.toml");
   if !lpm_toml_path.exists() {
     create_lpm_store(&lpm_store_path)?;
-    Ok(init_lpm_store(home_dir, lpm_toml_path)?)
+    Ok(init_lpm_store(home_dir, lpm_store_path, lpm_toml_path)?)
   } else {
     let lpm_toml: structs::LpmTOML =
       toml::from_str(&read_to_string(lpm_toml_path).context("Failed to read \"lpm.toml\"")?)
@@ -21,7 +18,7 @@ pub fn init() -> Result<structs::LpmTOML> {
   }
 }
 
-fn create_lpm_store(lpm_store_path: &Path) -> Result<()> {
+fn create_lpm_store(lpm_store_path: &PathBuf) -> Result<()> {
   create_dir_all(lpm_store_path.join("plugins"))
     .context("Failed to create \"plugins\" directory in store")?;
   create_dir_all(lpm_store_path.join("colors"))
@@ -31,21 +28,24 @@ fn create_lpm_store(lpm_store_path: &Path) -> Result<()> {
   Ok(())
 }
 
-fn init_lpm_store(home_dir: PathBuf, lpm_toml_path: PathBuf) -> Result<structs::LpmTOML> {
+fn init_lpm_store(
+  home_dir: PathBuf,
+  lpm_store_path: PathBuf,
+  lpm_toml_path: PathBuf,
+) -> Result<structs::LpmTOML> {
   let lpm_toml = structs::LpmTOML {
-    store: home_dir.join(".lpm-store"),
+    store: lpm_store_path,
     target: home_dir.join(".config").join("lite-xl"),
     config: structs::LpmTOMLConfig {
-      path: lpm_toml_path,
       git: true,
       decentralize: false,
     },
   };
-  create_lpm_toml(&lpm_toml.config.path, &lpm_toml)?;
+  create_lpm_toml(lpm_toml_path, &lpm_toml)?;
   Ok(lpm_toml)
 }
 
-fn create_lpm_toml(lpm_toml_path: &Path, lpm_toml: &structs::LpmTOML) -> Result<()> {
+fn create_lpm_toml(lpm_toml_path: PathBuf, lpm_toml: &structs::LpmTOML) -> Result<()> {
   write(
     lpm_toml_path,
     format!(
@@ -53,14 +53,9 @@ fn create_lpm_toml(lpm_toml_path: &Path, lpm_toml: &structs::LpmTOML) -> Result<
 target = {:?}
 
 [config]
-path = {:?}
 git = {}
 decentralize = {}"#,
-      lpm_toml.store,
-      lpm_toml.target,
-      lpm_toml.config.path,
-      lpm_toml.config.git,
-      lpm_toml.config.decentralize,
+      lpm_toml.store, lpm_toml.target, lpm_toml.config.git, lpm_toml.config.decentralize,
     ),
   )
   .context("Failed to create \"lpm.toml\"")?;

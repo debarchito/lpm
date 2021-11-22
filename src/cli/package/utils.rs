@@ -1,44 +1,20 @@
-use std::collections::HashMap;
+use anyhow::Result;
+use std::path::PathBuf;
 
-use crate::cli::colorize;
-use anyhow::{Context, Result};
-use reqwest::blocking as request;
-use termcolor::{ColorChoice, StandardStream};
+#[cfg(target_os = "windows")]
+pub fn link_from_store(src: PathBuf, dest: PathBuf) -> Result<()> {
+  junction::create(src, dest)?;
+  Ok(())
+}
+#[cfg(target_os = "windows")]
+pub fn link_exists(link: &PathBuf) -> Result<bool> { Ok(junction::exists(link)?) }
 
-pub fn verify(r#type: &str, packages: Vec<String>) -> Result<HashMap<String, String>> {
-  println!();
-  let mut stdout = colorize::Colorize {
-    stream: StandardStream::stdout(ColorChoice::Always),
-  };
-  stdout.success()?;
-  println!("[?] Registry look-up in progress. This is the only blocking task. So, stay put...");
-  stdout.reset()?;
-  let mut filtered_packages: HashMap<String, String> = HashMap::new();
-  for package in packages.into_iter() {
-    if let Some(mut first_letter) = package.chars().next() {
-      first_letter = first_letter.to_ascii_lowercase();
-      let body = request::get(format!(
-        "https://debarchito.github.io/lpm-routes/{}/{}/{}.toml",
-        r#type, first_letter, package
-      ))
-      .context("Couldn't reach the registry. Probably some network issue.")?
-      .text()
-      .context("Couldn't parse text from incoming request.")?
-      .to_string()
-      .replace('\n', "\n")
-      .replace('\r', "\r");
-      if body == "404\n" {
-        stdout.failure()?;
-        println!(
-          "[!] \"{}\" doesn't exist in registry. Therfore, skipping it.",
-          package
-        );
-        stdout.reset()?;
-      } else {
-        filtered_packages.insert(package, body);
-      }
-    } else { //None
-    };
-  }
-  Ok(filtered_packages)
+#[cfg(not(target_os = "windows"))]
+pub fn link_from_store(src: PathBuf, dest: PathBuf) -> Result<()> {
+  std::os::unix::fs::symlink(src, dest)?;
+  Ok(())
+}
+#[cfg(not(target_os = "windows"))]
+pub fn link_exists(link: &Path) -> Result<bool> {
+  Ok(std::fs::symlink_metadata(link)?.is_symlink())
 }

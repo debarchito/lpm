@@ -5,7 +5,8 @@ use anyhow::Result;
 mod cli;
 mod config;
 
-fn main() -> Result<()> {
-  cli::init(config::init()?)?;
+#[tokio::main]
+async fn main() -> Result<()> {
+  cli::init(config::init()?).await?;
   Ok(())
 }

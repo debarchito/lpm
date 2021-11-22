@@ -1,7 +1,7 @@
 use structopt::StructOpt;
 
 #[derive(Debug, StructOpt)]
-pub enum Command {
+pub enum Commands {
   #[structopt(alias = "p")]
   /// Handle Lite-XL plugins. Alias "p"
   Plugin(Options),
@@ -39,4 +39,10 @@ pub struct Options {
   #[structopt(long, short)]
   /// Point to the centralized store instead
   pub global: bool,
+  #[structopt(long, short = "G", takes_value = true, multiple = true)]
+  /// Clone Git repositories
+  pub git: Vec<String>,
+  #[structopt(long, short = "D", takes_value = true, multiple = true)]
+  /// Install decentralized Lua plugins/colors and TrueType fonts
+  pub decentralize: Vec<String>,
 }

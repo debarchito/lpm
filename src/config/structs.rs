@@ -10,7 +10,6 @@ pub struct LpmTOML {
 
 #[derive(Debug, Deserialize)]
 pub struct LpmTOMLConfig {
-  pub path: PathBuf,
   pub git: bool,
   pub decentralize: bool,
 }
