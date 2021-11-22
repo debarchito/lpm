@@ -1,5 +1,5 @@
 use anyhow::Result;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 #[cfg(target_os = "windows")]
 pub fn link_from_store(src: PathBuf, dest: PathBuf) -> Result<()> {
