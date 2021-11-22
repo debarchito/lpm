@@ -6,9 +6,13 @@ pub mod structs;
 
 pub fn init() -> Result<structs::LpmTOML> {
   let home_dir = dirs::home_dir().context("Failed to locate the home directory")?;
-  let lpm_toml_path = home_dir.join(".lpm-store").join("lpm.toml");
+  //Adds, plugins, color and font to .lpm_store rather than home directory
+
+  let lpm_store_path = home_dir.join(".lpm-store");
+  
+  let lpm_toml_path = lpm_store_path.join("lpm.toml");
   if !lpm_toml_path.exists() {
-    create_lpm_store(&home_dir)?;
+    create_lpm_store(&lpm_store_path)?;
     Ok(init_lpm_store(home_dir, lpm_toml_path)?)
   } else {
     let lpm_toml: structs::LpmTOML =
@@ -18,12 +22,12 @@ pub fn init() -> Result<structs::LpmTOML> {
   }
 }
 
-fn create_lpm_store(home_dir: &Path) -> Result<()> {
-  create_dir_all(home_dir.join("plugins"))
+fn create_lpm_store(lpm_store_path: &Path) -> Result<()> {
+  create_dir_all(lpm_store_path.join("plugins"))
     .context("Failed to create \"plugins\" directory in store")?;
-  create_dir_all(home_dir.join("colors"))
+  create_dir_all(lpm_store_path.join("colors"))
     .context("Failed to create \"colors\" directory in store")?;
-  create_dir_all(home_dir.join("fonts"))
+  create_dir_all(lpm_store_path.join("fonts"))
     .context("Failed to create \"fonts\" directory in store")?;
   Ok(())
 }
