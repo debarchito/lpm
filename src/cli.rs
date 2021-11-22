@@ -21,22 +21,22 @@ struct Lpm {
 pub fn init(lpm_toml: structs::LpmTOML) -> Result<()> {
   let lpm = Lpm::from_args();
   match lpm.cmd {
-    enums::Command::Plugin(options) => exec(options, lpm_toml)?,
-    enums::Command::Color(options) => exec(options, lpm_toml)?,
-    enums::Command::Font(options) => exec(options, lpm_toml)?,
+    enums::Command::Plugin(options) => exec("plugins", options, lpm_toml)?,
+    enums::Command::Color(options) => exec("colors", options, lpm_toml)?,
+    enums::Command::Font(options) => exec("fonts", options, lpm_toml)?,
   }
   Ok(())
 }
 
-fn exec(option: enums::Options, lpm_toml: structs::LpmTOML) -> Result<()> {
+fn exec(value: &'static str, option: enums::Options, lpm_toml: structs::LpmTOML) -> Result<()> {
   if !option.install.is_empty() {
-    package::install("fonts", option.install)?;
+    package::install(value, option.install)?;
   } else if !option.link.is_empty() {
-    package::link("fonts", option.link, lpm_toml)?;
+    package::link(value, option.link, lpm_toml)?;
   } else if !option.unlink.is_empty() {
-    package::unlink("fonts", option.unlink, lpm_toml)?;
+    package::unlink(value, option.unlink, lpm_toml)?;
   } else if option.list {
-    package::list("fonts", lpm_toml, option.global)?;
+    package::list(value, lpm_toml, option.global)?;
   }
   Ok(())
 }
