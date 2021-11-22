@@ -14,5 +14,5 @@ target/
 # Plans
 plans/
 
-#Cargo.lock
+# Cargo.lock
 Cargo.lock
