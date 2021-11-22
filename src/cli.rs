@@ -37,6 +37,60 @@ fn exec(value: &'static str, option: enums::Options, lpm_toml: structs::LpmTOML)
     package::unlink(value, option.unlink, lpm_toml)?;
   } else if option.list {
     package::list(value, lpm_toml, option.global)?;
+    enums::Command::Plugin {
+      install,
+      link,
+      unlink,
+      list,
+      global,
+      ..
+    } => {
+      if !install.is_empty() {
+        package::install("plugins", install)?;
+      } else if !link.is_empty() {
+        package::link("plugins", link, lpm_toml)?;
+      } else if !unlink.is_empty() {
+        package::unlink("plugins", unlink, lpm_toml)?;
+      } else if list {
+        package::list("plugins", lpm_toml, global)?;
+      }
+    }
+    enums::Command::Color {
+      install,
+      link,
+      unlink,
+      list,
+      global,
+      ..
+    } => {
+      if !install.is_empty() {
+        package::install("colors", install)?;
+      } else if !link.is_empty() {
+        package::link("colors", link, lpm_toml)?;
+      } else if !unlink.is_empty() {
+        package::unlink("colors", unlink, lpm_toml)?;
+      } else if list {
+        package::list("colors", lpm_toml, global)?;
+      }
+    }
+    enums::Command::Font {
+      install,
+      link,
+      unlink,
+      list,
+      global,
+      ..
+    } => {
+      if !install.is_empty() {
+        package::install("fonts", install)?;
+      } else if !link.is_empty() {
+        package::link("fonts", link, lpm_toml)?;
+      } else if !unlink.is_empty() {
+        package::unlink("fonts", unlink, lpm_toml)?;
+      } else if list {
+        package::list("fonts", lpm_toml, global)?;
+      }
+    }
   }
   Ok(())
 }
