@@ -15,6 +15,9 @@ pub enum Commands {
 
 #[derive(Debug, StructOpt)]
 pub struct Options {
+  #[structopt(long, short = "S", takes_value = true, multiple = true)]
+  /// Searches package
+  pub search: Vec<String>,
   #[structopt(long, short, takes_value = true, multiple = true)]
   /// Install package in store
   pub install: Vec<String>,

@@ -4,11 +4,12 @@ use structopt::StructOpt;
 pub mod colorize;
 mod enums;
 mod package;
+mod term;
 
 #[derive(Debug, StructOpt)]
 #[structopt(
   name = "Lite-XL Package Manager (lpm)",
-  about = "A package manager for the Lite-XL code editor"
+  about = "A package manager for the Lite-XL"
 )]
 struct Lpm {
   #[structopt(subcommand)]
@@ -26,7 +27,11 @@ pub async fn init(lpm_toml: structs::LpmTOML) -> Result<()> {
 }
 
 fn exec(value: &'static str, option: enums::Options, lpm_toml: structs::LpmTOML) -> Result<()> {
-  if !option.link.is_empty() {
+  if !option.search.is_empty() {
+    package::search::search(value, &option.search[0]).unwrap();
+  } else if !option.install.is_empty() {
+    package::install::install(value, option.install, lpm_toml)?;
+  } else if !option.link.is_empty() {
     package::link::link(value, option.link, lpm_toml)?;
   } else if !option.remove.is_empty() {
     package::remove::remove(value, option.remove, lpm_toml)?;

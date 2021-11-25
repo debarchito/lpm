@@ -5,7 +5,13 @@ pub mod structs;
 
 pub fn init() -> Result<structs::LpmTOML> {
   let home_dir = dirs::home_dir().context("Failed to locate the home directory")?;
-  let lpm_store_path = home_dir.join(".lpm-store");
+  let lpm_store_path;
+  //FIX: Changes Windows location to AddData/Local
+  if cfg!(windows) {
+    lpm_store_path = home_dir.join("AppData").join("Local").join("lpm-store");
+  } else {
+    lpm_store_path = home_dir.join(".lpm-store");
+  }
   let lpm_toml_path = lpm_store_path.join("lpm.toml");
   if !lpm_toml_path.exists() {
     create_lpm_store(&lpm_store_path)?;

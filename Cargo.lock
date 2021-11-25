@@ -431,6 +431,7 @@ dependencies = [
  "termcolor",
  "tokio",
  "toml",
+ "url",
 ]
 
 [[package]]
