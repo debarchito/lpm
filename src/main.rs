@@ -1,6 +1,7 @@
 #![allow(stable_features)]
 #![feature(is_symlink)]
 
+//FIXME: Unneccesary Error Handling
 use anyhow::Result;
 mod cli;
 mod config;

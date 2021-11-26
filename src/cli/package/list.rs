@@ -1,16 +1,10 @@
-use crate::cli::colorize;
+use super::term;
 use crate::config::structs;
 use anyhow::{Context, Result};
 use std::{fs::read_dir, process};
-use termcolor::{ColorChoice, StandardStream};
 
 pub fn list(r#type: &str, lpm_toml: structs::LpmTOML, global: bool) -> Result<()> {
-  let mut stdout = colorize::Colorize {
-    stream: StandardStream::stdout(ColorChoice::Always),
-  };
-  stdout.success()?;
-  println!("\n[?] List of {}: \n", r#type);
-  stdout.reset()?;
+  term::pretty_print(&format!("\n[?] List of {}: \n", r#type), 1)?;
   let point_to = if global {
     lpm_toml.store.join(r#type)
   } else {
