@@ -1,6 +1,6 @@
 ## Lite-XL Package Manager (lpm)
 
-**NOTE:** Under heavy development. You are free to explore but expect breaking changes.
+**NOTE:** This implementation has been deprecated, but there are talks going on about re-implementing it. But, lpm isn't dead. There are many variables to consider while making a package manager. Hop on the [Lite-XL Discord Server](https://discord.gg/RWzqC3nx7K) and ping `@Andew` for any questions or advices.
 
 ### Introduction
 
